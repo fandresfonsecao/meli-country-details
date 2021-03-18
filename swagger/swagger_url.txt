@@ -1,0 +1,3 @@
+http://localhost:8080/validaIp/v2/api-docs
+http://localhost:8080/validaIp/swagger-resources
+http://localhost:8080/validaIp/swagger-ui.html
