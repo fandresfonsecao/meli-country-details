@@ -86,7 +86,7 @@ Cuando terminé de leer el ejercicio el principal objetivo era una API rest. Pri
 
 - Finalmente ejecutarlo
 
-![image](https://user-images.githubusercontent.com/80859407/111666290-901ad100-87e1-11eb-9289-989b9562dbc3.png)
+![image](https://user-images.githubusercontent.com/80859407/111666568-d53f0300-87e1-11eb-8be3-f196c2883b4f.png)
 
 ### Docker
 
