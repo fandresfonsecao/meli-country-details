@@ -1,0 +1,139 @@
+{
+	"info": {
+		"_postman_id": "56113282-8e06-4011-bbe7-ebaaf915cd72",
+		"name": "Test country detail banned ip",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Delete banned ip Copy",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/validaIp/ban-ip/{{ip}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"validaIp",
+						"ban-ip",
+						"{{ip}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add banned ip Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/validaIp/ban-ip/{{ip}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"validaIp",
+						"ban-ip",
+						"{{ip}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test get country detail banned IP",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"General status code is 500\", function () {\r",
+							"  pm.response.to.have.status(500);\r",
+							"});\r",
+							"pm.test(\"Response object has all error keys\", function () {\r",
+							"  pm.expect(pm.response.json()).to.have.all.keys('statusCode','transactionTimestamp','error');\r",
+							"});\r",
+							"pm.test(\"Response status code is 500\", function () {\r",
+							"  pm.expect(pm.response.json().statusCode).to.eql(500);\r",
+							"});\r",
+							"pm.test(\"Error code and message are for invalid IP\", function () {\r",
+							"  pm.expect(pm.response.json().error.code).to.eql(\"1004\");\r",
+							"  pm.expect(pm.response.json().error.message).include(\"is banned\")\r",
+							"});\r",
+							"pm.test(\"Exception type confirm a controlled exception\", function () {\r",
+							"  pm.expect(pm.response.json().error.exception).include(\"RestException\")\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/validaIp/country-detail/{{ip}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"validaIp",
+						"country-detail",
+						"{{ip}}"
+					],
+					"query": [
+						{
+							"key": "currencyExchange",
+							"value": "USD",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080/"
+		},
+		{
+			"key": "ip",
+			"value": "192.168.0.0"
+		}
+	]
+}

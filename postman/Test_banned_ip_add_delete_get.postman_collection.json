@@ -1,0 +1,223 @@
+{
+	"info": {
+		"_postman_id": "56113282-8e06-4011-bbe7-ebaaf915cd72",
+		"name": "Test banned ip add",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Prepares test",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/validaIp/ban-ip/{{ip}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"validaIp",
+						"ban-ip",
+						"{{ip}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add banned ip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('General status code is 200', function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test('Response object has correct response keys', function () {\r",
+							"  pm.expect(pm.response.json()).to.have.all.keys('statusCode','transactionTimestamp');\r",
+							"  pm.expect(pm.response.json()).to.not.have.keys('statusCode','transactionTimestamp','data','error');\r",
+							"});\r",
+							"pm.test('Response status code is 200', function () {\r",
+							"  pm.expect(pm.response.json().statusCode).to.eql(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/validaIp/ban-ip/{{ip}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"validaIp",
+						"ban-ip",
+						"{{ip}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get banned ip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('General status code is 200', function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test('Response object has correct response keys', function () {\r",
+							"    pm.expect(pm.response.json()).to.have.all.keys('statusCode','transactionTimestamp', 'data');\r",
+							"    pm.expect(pm.response.json()).to.not.have.keys('error');\r",
+							"});\r",
+							"pm.test('Response status code is 200', function () {\r",
+							"    pm.expect(pm.response.json().statusCode).to.eql(200);\r",
+							"});\r",
+							"pm.test('Response data is the expected one', function () {\r",
+							"    pm.expect(pm.response.json().data.ip).to.eql(pm.request.url.path[3]);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/validaIp/ban-ip/{{ip}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"validaIp",
+						"ban-ip",
+						"{{ip}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Prepares test",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/validaIp/ban-ip/{{ip}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"validaIp",
+						"ban-ip",
+						"{{ip}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Gets non existent records",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('General status code is 500', function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});\r",
+							"pm.test('Response object has correct response keys', function () {\r",
+							"    pm.expect(pm.response.json()).to.have.all.keys('statusCode','transactionTimestamp', 'error');\r",
+							"    pm.expect(pm.response.json()).to.not.have.keys('data');\r",
+							"});\r",
+							"pm.test('Response status code is 500', function () {\r",
+							"    pm.expect(pm.response.json().statusCode).to.eql(500);\r",
+							"});\r",
+							"pm.test('Response has a correct error', function () {\r",
+							"    pm.expect(pm.response.json().error.code).to.eql('2003');\r",
+							"    pm.expect(pm.response.json().error.message).includes('No record found by ip:', pm.request.url.path[3]);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/validaIp/ban-ip/{{ip}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"validaIp",
+						"ban-ip",
+						"{{ip}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deletes non existent records",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/validaIp/ban-ip/{{ip}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"validaIp",
+						"ban-ip",
+						"{{ip}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080/"
+		},
+		{
+			"key": "ip",
+			"value": "192.168.0.0"
+		}
+	]
+}

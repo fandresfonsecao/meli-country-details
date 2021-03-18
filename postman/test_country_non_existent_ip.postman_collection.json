@@ -1,0 +1,100 @@
+{
+	"info": {
+		"_postman_id": "25c61679-bee5-4fa5-a8e3-95df1765d39f",
+		"name": "Test country detail non existent ip",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Test get country detail with non existent IP",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"General status code is 500\", function () {\r",
+							"  pm.response.to.have.status(500);\r",
+							"});\r",
+							"pm.test(\"Response object has all error keys\", function () {\r",
+							"  pm.expect(pm.response.json()).to.have.all.keys('statusCode','transactionTimestamp','error');\r",
+							"});\r",
+							"pm.test(\"Response status code is 500\", function () {\r",
+							"  pm.expect(pm.response.json().statusCode).to.eql(500);\r",
+							"});\r",
+							"pm.test(\"Error code and message are for invalid IP\", function () {\r",
+							"  pm.expect(pm.response.json().error.code).to.eql(\"1002\");\r",
+							"  pm.expect(pm.response.json().error.message).include(\"Not valid IP:\")\r",
+							"});\r",
+							"pm.test(\"Exception type confirm a controlled exception\", function () {\r",
+							"  pm.expect(pm.response.json().error.exception).include(\"RestException\")\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/validaIp/country-detail/:ip",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"validaIp",
+						"country-detail",
+						":ip"
+					],
+					"query": [
+						{
+							"key": "currencyExchange",
+							"value": "USD",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "ip",
+							"value": "2.2"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080/"
+		},
+		{
+			"key": "ip",
+			"value": "192.168.0.0"
+		}
+	]
+}
