@@ -70,9 +70,9 @@ Cuando terminé de leer el ejercicio el principal objetivo era una API rest. Pri
 ##### Crear base de datos y usuario
 
 - En la carpeta /bin ejecutar lo siguiente: mysql.exe -u root -p dar enter, cuando pida contraseña enter nuevamente.
-- Ejecutar: CREATE DATABASE melidb;
-- Ejecutar: use melidb;
-- Ejecutar:  CREATE USER 'meli_user'@'localhost' IDENTIFIED  BY 'meli_pass';
+- Ejecutar: ```CREATE DATABASE melidb;```
+- Ejecutar: ```use melidb;```
+- Ejecutar:  ```CREATE USER 'meli_user'@'localhost' IDENTIFIED  BY 'meli_pass';```
 
 ##### Crear tablas en la base de datos
 
@@ -90,6 +90,11 @@ Cuando terminé de leer el ejercicio el principal objetivo era una API rest. Pri
 
 ### Docker
 
+- Para realizar la instalación con usando docker se debe hacer lo sigueinte:
+  1. Clonar el proyecto a una ruta local.
+  2. Ubicarse en la carpeta docker dentro del proyecto.
+  3. Ejecutar desde una terminal de comandos (Dentro de la carpeta docker): ```docker-compose up --build```
+
 ## Explorar
 
 - Una vez esta iniciado la base de datos y el servidor se puede ingresar a la siguiente URL: http://localhost:8080/validaIp/swagger-ui.html allí podrá la documentacion en swagger del proyecto
@@ -106,6 +111,7 @@ Cuando terminé de leer el ejercicio el principal objetivo era una API rest. Pri
 #### Country detail
 - El endpoint principal es http://localhost:8080/validaIp/country-detail/:ip path paramtero es la IP que se desea consultar y query parametros (currencyExchange) es a la moneda que se quiere hacer la conversión.
 Por ejemplo para la ip 4.4.4.4 la respuesta es:
+```
 {
     "statusCode": 200,
     "transactionTimestamp": "17-03-2021 06:48:24",
@@ -130,33 +136,39 @@ Por ejemplo para la ip 4.4.4.4 la respuesta es:
         "dmlTmst": "17-03-2021 11:48:39"
     }
 }
+```
 Si enviamos la ip "my_ip_local" parte de la respuesta será:
+```
+"statusCode": 500,
+"transactionTimestamp": "17-03-2021 07:04:11",
+"error": {
+    "code": "1002",
+    "message": "Not valid IP: my_ip_local",
+    "exception": "com.mercadoLibre.validaIp.exception.RestException: Not valid IP: my_ip_local",
+```
 
-    "statusCode": 500,
-    "transactionTimestamp": "17-03-2021 07:04:11",
-    "error": {
-        "code": "1002",
-        "message": "Not valid IP: my_ip_local",
-        "exception": "com.mercadoLibre.validaIp.exception.RestException: Not valid IP: my_ip_local",       
 Si enviamos la ip 1.1.1.1 y esta bloqueada parte de la respuesta será:
-
-    "statusCode": 500,
-    "transactionTimestamp": "17-03-2021 07:04:50",
-    "error": {
-        "code": "1004",
-        "message": "The IP: 1.1.1.1 is banned",
-        "exception": "com.mercadoLibre.validaIp.exception.RestException: The IP: 1.1.1.1 is banned",
+```
+"statusCode": 500,
+"transactionTimestamp": "17-03-2021 07:04:50",
+"error": {
+    "code": "1004",
+    "message": "The IP: 1.1.1.1 is banned",
+    "exception": "com.mercadoLibre.validaIp.exception.RestException: The IP: 1.1.1.1 is banned",
+```
 
 #### Banned IP
 
 Podemos prohibir IPs lo hacemos con el siguiente endpoint: POST http://localhost:8080/validaIp/ban-ip/:ip solo retorna el exito de la operación
+```
 {
     "statusCode": 200,
     "transactionTimestamp": "17-03-2021 07:15:04"
 }
+```
 
 Podemos consultar una IP puntual con el siguiente endpoint: GET http://localhost:8080/validaIp/ban-ip/:ip su respuesta será:
-
+```
 {
     "statusCode": 200,
     "transactionTimestamp": "17-03-2021 07:15:49",
@@ -165,6 +177,7 @@ Podemos consultar una IP puntual con el siguiente endpoint: GET http://localhost
         "dmlTmst": "2021-03-18T00:15:04.960+00:00"
     }
 }
+```
 También otras dos operaciones complementarias se pueden consultar en la documentación swagger.
 
 ## Pruebas
