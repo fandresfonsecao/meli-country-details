@@ -5,6 +5,11 @@ API rest que a partir de una dirección IP obtiene detales del país, como datos
   * [Experiencia](#experiencia)
 * [Configuración](#configuración)
   * [Instrucciones](#instrucciones)
+    * [Apache Tomcat](#apache-tomcat)
+    * [MySql](#mysql)
+      * [Crear base de datos y usuario](#crear-base-de-datos-y-usuario)
+      * [Crear tablas en la base de datos](#crear-tablas-en-la-base-de-datos)
+    * [Docker](#docker)
 * [Explorar](#explorar)
   * [Servicios](#servicios)
     * [Country-detail](#country-detail)
@@ -32,8 +37,46 @@ Cuando terminé de leer el ejercicio el principal objetivo era una API rest. Pri
 
 ### Instrucciones
 
-- Descargar Apache Tomcat versión 8.5.64, descomprimirlo y ubicarlo en la unidad de preferencia
-- Descargar MySql Utilizar el puerto 3306, otra opión es descargar e instalar xampp finalmente desde una terminal de comandos ir al home de Myql luego ejecutar bin/mysql.exe o bin/mysql.sh. Los script a ejecutar se encuentran en la carpeta "mysql" en este repositorio
+#### Apache tomcat
+
+- Descargar Apache Tomcat versión 8.5.64, descomprimirlo y ubicarlo en la unidad de preferencia.
+- Añadirlo a eclipse.
+  - En la pestaña servers
+  
+  ![image](https://user-images.githubusercontent.com/80859407/111659134-f8b27f80-87da-11eb-8643-2c4d5a4dff72.png)
+  
+  - Seleccionar la versión de tomcat
+  
+  ![image](https://user-images.githubusercontent.com/80859407/111659370-2b5c7800-87db-11eb-89ea-6f2f1f75028a.png)
+  
+  - Ubicar el home de tomcat
+  
+  ![image](https://user-images.githubusercontent.com/80859407/111659672-6bbbf600-87db-11eb-9e67-7231e7009cc5.png)
+  
+  - Iniciar el servidor y validar que no genere ningun error que bloquee la inicialización.
+
+#### MySql
+
+- Descargar e instalar [XAMPP](https://www.apachefriends.org/index.html) Ahí llega una version de MySql que no necesita mucha configuración aparte de la creación de la base de datos.
+- Iniciar MySql desde XAMPP 
+
+![image](https://user-images.githubusercontent.com/80859407/111661421-023ce700-87dd-11eb-935e-dcb5d50ccbf9.png)
+
+- En el home de xappm ir a la carpeta /bin
+
+![image](https://user-images.githubusercontent.com/80859407/111661103-bab65b00-87dc-11eb-800e-0ae685a42d16.png)
+
+##### Crear base de datos y usuario
+
+- En la carpeta /bin ejecutar lo sigueinte: mysql.exe -u root -p dar enter, cuando pida contraseña enter nuevamente.
+- Ejecutar: CREATE DATABASE melidb;
+- Ejecutar: use melidb;
+- Ejecutar:  CREATE USER 'meli_user'@'localhost' IDENTIFIED  BY 'meli_pass';
+
+##### Crear tablas en la base de datos
+
+- Estando dónde quedamos en el punto anterior en este repositorio esta la carpeta mysql, allí encontrarán las 4 tablas necesarias. Hay que ejecutarlas en el sigueinte orden: banned_ip, country_detail, country_currency y currency_exchange.
+
 - Utilizar el archivo docker que se encuentra en la carpeta "docker" en este repositorio y realizar lo siguiente:
 - Sino se utilizó el archivo docker clone este proyecto el importelo al IDE de su elección (En mi caso utilice eclipse)
 - Añada el servidor al IDE en caso que desee gestionarlo desde allí
@@ -41,10 +84,12 @@ Cuando terminé de leer el ejercicio el principal objetivo era una API rest. Pri
 - Cuando la inicialización terminó y todo esta correcto se mostrará el sigueinte mensaje: INFO  [http-nio-8080-exec-2] o.s.w.s.FrameworkServlet: Completed initialization in 1 ms
 - En la consola se comienza a ver el inicio de igual forma en la raiz del proyecto hay una carpeta "logs"
 
+### Docker
+
 ## Explorar
 
 - Una vez esta iniciado la base de datos y el servidor se puede ingresar a la siguiente URL: http://localhost:8080/validaIp/swagger-ui.html allí podrá la documentacion en swagger del proyecto
-- Puede utilizar postman (https://www.postman.com/) para importar el swagger.json del proyecto el cual se puede descargar desde la URL anterior. Igualmente se encuentra en la carpeta "postman". Allí tambien encontará collecciones para las pruebas junto con datos para cada una de ellas.
+- Puede utilizar [Postman](https://www.postman.com/) para importar el swagger.json del proyecto el cual se puede descargar desde la URL anterior. Igualmente se encuentra en la carpeta "postman", también encontará collecciones para las pruebas junto con datos para cada una de ellas.
 - En los siguientes endpoints: http://localhost:8080/validaIp/country-detail/status y http://localhost:8080/validaIp/ban-ip/status ayudan a determinar si está listo para recibir peticiones la respuesta será:
   {
       "statusCode": 200,
