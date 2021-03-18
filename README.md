@@ -9,6 +9,7 @@ API rest que a partir de una dirección IP obtiene detales del país, como datos
     * [MySql](#mysql)
       * [Crear base de datos y usuario](#crear-base-de-datos-y-usuario)
       * [Crear tablas en la base de datos](#crear-tablas-en-la-base-de-datos)
+      * [Ejecución del proyecto](#ejecución-del-proyecto)
     * [Docker](#docker)
 * [Explorar](#explorar)
   * [Servicios](#servicios)
@@ -77,12 +78,15 @@ Cuando terminé de leer el ejercicio el principal objetivo era una API rest. Pri
 
 - Estando dónde quedamos en el punto anterior en este repositorio esta la carpeta mysql, allí encontrarán las 4 tablas necesarias. Hay que ejecutarlas en el sigueinte orden: banned_ip, country_detail, country_currency y currency_exchange.
 
-- Utilizar el archivo docker que se encuentra en la carpeta "docker" en este repositorio y realizar lo siguiente:
-- Sino se utilizó el archivo docker clone este proyecto el importelo al IDE de su elección (En mi caso utilice eclipse)
-- Añada el servidor al IDE en caso que desee gestionarlo desde allí
-- Desde eclipse para ejecutar el proyecto solo hay que hacer click derecho en la raiz de proyecto -> Run as -> Run on Server
-- Cuando la inicialización terminó y todo esta correcto se mostrará el sigueinte mensaje: INFO  [http-nio-8080-exec-2] o.s.w.s.FrameworkServlet: Completed initialization in 1 ms
-- En la consola se comienza a ver el inicio de igual forma en la raiz del proyecto hay una carpeta "logs"
+##### Ejecución del proyecto
+
+- Usa vez los pasos anteriores han ido completados, solo faltará clonar este proyecto que contiene el código fuente e importarlo a eclipse como "Maven project"
+
+![image](https://user-images.githubusercontent.com/80859407/111665987-47fbae80-87e1-11eb-985a-cf2fe992e107.png)
+
+- Finalmente ejecutarlo
+
+![image](https://user-images.githubusercontent.com/80859407/111666290-901ad100-87e1-11eb-9289-989b9562dbc3.png)
 
 ### Docker
 
