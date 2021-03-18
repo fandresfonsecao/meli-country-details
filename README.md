@@ -69,14 +69,14 @@ Cuando terminé de leer el ejercicio el principal objetivo era una API rest. Pri
 
 ##### Crear base de datos y usuario
 
-- En la carpeta /bin ejecutar lo sigueinte: mysql.exe -u root -p dar enter, cuando pida contraseña enter nuevamente.
+- En la carpeta /bin ejecutar lo siguiente: mysql.exe -u root -p dar enter, cuando pida contraseña enter nuevamente.
 - Ejecutar: CREATE DATABASE melidb;
 - Ejecutar: use melidb;
 - Ejecutar:  CREATE USER 'meli_user'@'localhost' IDENTIFIED  BY 'meli_pass';
 
 ##### Crear tablas en la base de datos
 
-- Estando dónde quedamos en el punto anterior en este repositorio esta la carpeta mysql, allí encontrarán las 4 tablas necesarias. Hay que ejecutarlas en el sigueinte orden: banned_ip, country_detail, country_currency y currency_exchange.
+- Estando dónde quedamos en el punto anterior en este repositorio esta la carpeta mysql, allí encontrarán las 4 tablas necesarias. Hay que ejecutarlas en el siguiente orden: banned_ip, country_detail, country_currency y currency_exchange.
 
 ##### Ejecución del proyecto
 
@@ -149,13 +149,13 @@ Si enviamos la ip 1.1.1.1 y esta bloqueada parte de la respuesta será:
 
 #### Banned IP
 
-Podemos prohibir IPs lo hacemos con el sigueinte endpoint: POST http://localhost:8080/validaIp/ban-ip/:ip solo retorna el exito de la operación
+Podemos prohibir IPs lo hacemos con el siguiente endpoint: POST http://localhost:8080/validaIp/ban-ip/:ip solo retorna el exito de la operación
 {
     "statusCode": 200,
     "transactionTimestamp": "17-03-2021 07:15:04"
 }
 
-Podemos consultar una IP puntual con el sigueinte endpoint: GET http://localhost:8080/validaIp/ban-ip/:ip su respuesta será:
+Podemos consultar una IP puntual con el siguiente endpoint: GET http://localhost:8080/validaIp/ban-ip/:ip su respuesta será:
 
 {
     "statusCode": 200,
@@ -165,7 +165,7 @@ Podemos consultar una IP puntual con el sigueinte endpoint: GET http://localhost
         "dmlTmst": "2021-03-18T00:15:04.960+00:00"
     }
 }
-Tambien otras dos operaciones complentarias se pueden consultar en la documentación swagger.
+También otras dos operaciones complementarias se pueden consultar en la documentación swagger.
 
 ## Pruebas
 
