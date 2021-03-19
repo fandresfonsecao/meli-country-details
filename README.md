@@ -194,7 +194,7 @@ También otras dos operaciones complementarias se pueden consultar en la documen
 
 # Pruebas
 
-Para las pruebas unitarias utilice junit y tambien utilicé postman allí cree llamados a los diferentes endpoints y confirme la respuesta para cada caso. En la carpeta postman podrán encontrar las colecciones datos. Para ejecutarlo desde postman solo será necesario importar cada colecció, seleccionar el conjuento de datos ejecutarla con runner.
+Para las pruebas unitarias utilice junit y tambien utilicé postman allí cree llamados a los diferentes endpoints y confirmé la respuesta para cada caso. En la carpeta postman podrán encontrar las colecciones datos. Para ejecutarlo desde postman solo será necesario importar cada colección, seleccionar el conjunto de datos ejecutarla con runner.
 
 # Sobre el código fuente
 
