@@ -83,7 +83,8 @@ Cuando terminé de leer el ejercicio el principal objetivo era una API rest. Pri
 - En la carpeta /bin ejecutar lo siguiente: mysql.exe -u root -p dar enter, cuando pida contraseña enter nuevamente.
 - Ejecutar: ```CREATE DATABASE melidb;```
 - Ejecutar: ```use melidb;```
-- Ejecutar:  ```CREATE USER 'meli_user'@'localhost' IDENTIFIED  BY 'meli_pass';```
+- Ejecutar: ```CREATE USER 'meli_user'@'localhost' IDENTIFIED  BY 'meli_pass';```
+- Ejecutar: ```GRANT ALL PRIVILEGES ON melidb TO 'meli_user'@'localhost';```
 
 #### Crear tablas en la base de datos
 
