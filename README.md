@@ -198,4 +198,4 @@ Para las pruebas unitarias utilice junit y tambien utilicé postman allí cree l
 
 # Sobre el código fuente
 
-Cómo intervienen 3 servicios externos, consultarlos en línea siempre no es muy agradable además, la información de cada país no cambiará con mucha frecuencia. Por esa razón implemente un cache aunque está predeterminado a 60 segundos; se puede actualizar el valor con solo cambiar el archivo de propiedades de la aplicación.
+Como intervienen 3 servicios externos (Información del país, Información de la moneda y cambio de divisas). Consultarlos en línea siempre va ser muy costoso además, la información de cada país no cambiará con mucha frecuencia. Por esa razón implementé un cache predeterminado a 60 segundos sin embargo, se puede actualizar el valor con solo cambiar el archivo de propiedades de la aplicación.
