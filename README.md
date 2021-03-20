@@ -43,7 +43,7 @@ El ejercicio consiste en construir una API Rest que permita:
  
 ## Experiencia
 
-Cuando terminé de leer el ejercicio el principal objetivo era una API rest. Primero pensé en utilizar jersey, lo habia utilizado en ocasiones anteriores sin embargo, aproveché la oportunidad para introducirme a spring-boot. No fue sencillo pero paso a paso fui atandado cada uno de los cabos para que sea funcional. Para entregar el ejecicio indicaron que deseable era por medio de un docker file así que también tuve la oportunidad de aprender un poco sobre eso.
+Cuando terminé de leer el ejercicio el principal objetivo era una API rest. Primero pensé en utilizar jersey, lo habia utilizado en ocasiones anteriores sin embargo, aproveché la oportunidad para introducirme a spring-boot. No fue sencillo pero paso a paso fui atandado cada uno de los cabos para que sea funcional. Para entregar el ejercicio indicaron que deseable era por medio de un docker file así que también tuve la oportunidad de aprender un poco sobre eso.
 
 # Configuración
 
@@ -92,7 +92,7 @@ Cuando terminé de leer el ejercicio el principal objetivo era una API rest. Pri
 
 #### Ejecución del proyecto
 
-- Usa vez los pasos anteriores han ido completados, solo faltará clonar este proyecto que contiene el código fuente e importarlo a eclipse como "Maven project"
+- Una vez han ido completados los pasos anteriores, solo faltará clonar este proyecto que contiene el código fuente e importarlo a eclipse como "Maven project"
 
 ![image](https://user-images.githubusercontent.com/80859407/111665987-47fbae80-87e1-11eb-985a-cf2fe992e107.png)
 
