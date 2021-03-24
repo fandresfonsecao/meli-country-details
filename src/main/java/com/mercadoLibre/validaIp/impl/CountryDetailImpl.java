@@ -1,8 +1,7 @@
 package com.mercadoLibre.validaIp.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -17,7 +16,6 @@ import com.mercadoLibre.validaIp.dto.CountryDetailDto;
 import com.mercadoLibre.validaIp.dto.CountryInfoResp;
 import com.mercadoLibre.validaIp.dto.Currency;
 import com.mercadoLibre.validaIp.dto.CurrencyExchangeDto;
-import com.mercadoLibre.validaIp.dto.RateResp;
 import com.mercadoLibre.validaIp.externalRestclient.CountryCurrencyClient;
 import com.mercadoLibre.validaIp.externalRestclient.CountryExchangeClient;
 import com.mercadoLibre.validaIp.externalRestclient.CountryInfoClient;
@@ -72,17 +70,9 @@ public class CountryDetailImpl extends CustomCache<CountryDetailDto> {
 			countryDetailDto.setIsoCode(countryInfoResp.getCountryCode3());
 			Currency currency = countryCurrencyClient.getCurency(countryInfoResp.getCountryName());
 			countryDetailDto.setCurrency(currency);
-			RateResp rateResp = countryExchangeClient
-					.getExchangeRate(countryDetailDto.getCurrency().getCode(), filterCurrencyCodes);
-			ArrayList<CurrencyExchangeDto> currencyExchanges = new ArrayList<CurrencyExchangeDto>();
-			Iterator<String> iterator = rateResp.getRates().keySet().iterator();
-			while (iterator.hasNext()) {
-				String key = iterator.next();
-				CurrencyExchangeDto currencyExchange = new CurrencyExchangeDto();
-				currencyExchange.setType(key);
-				currencyExchange.setValue(rateResp.getRates().get(key));
-				currencyExchanges.add(currencyExchange);
-			}
+			List<CurrencyExchangeDto> currencyExchanges = countryExchangeClient
+					.getCurrencyExchanges(countryDetailDto.getCurrency().getCode(),
+							filterCurrencyCodes);
 			countryDetailDto.setCurrencyExchanges(currencyExchanges);
 			CountryDetail countryDetail = CountryDetailTransformer
 					.toCountryDetail(countryDetailDto);

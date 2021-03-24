@@ -14,6 +14,7 @@ import com.mercadoLibre.validaIp.exception.RestException;
 import com.mercadoLibre.validaIp.exception.message.NotFoundException;
 import com.mercadoLibre.validaIp.util.ApplicationProperties;
 import com.mercadoLibre.validaIp.util.ApplicationPropertyCode;
+import com.mercadoLibre.validaIp.util.UtilValidation;
 
 /**
  * Call external service and get country's information
@@ -27,6 +28,9 @@ public class CountryInfoClient {
 	@Autowired
 	private ApplicationProperties applicationProperties;
 
+	@Autowired
+	private RestTemplate restTemplate;
+
 	/**
 	 * Get country's basic information given an IP
 	 * 
@@ -35,10 +39,11 @@ public class CountryInfoClient {
 	 * @return {@link com.mercadoLibre.validaIp.dto.CountryInfoResp}
 	 */
 	public CountryInfoResp getCountryByIp(String ip) {
+		UtilValidation.validateIp(ip);
 		String baseEndpoint = applicationProperties
 				.getProperty(ApplicationPropertyCode.COUNTRY_INFO_ENDPOINT);
 		String endpoint = MessageFormat.format(baseEndpoint, ip);
-		RestTemplate restTemplate = new RestTemplate();
+		UtilValidation.validateUrl(endpoint);
 		ResponseEntity<CountryInfoResp> responseEntity = restTemplate.getForEntity(endpoint,
 				CountryInfoResp.class);
 		CountryInfoResp countryInfoResp = responseEntity.getBody();

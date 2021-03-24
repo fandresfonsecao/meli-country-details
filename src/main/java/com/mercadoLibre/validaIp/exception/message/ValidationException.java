@@ -15,7 +15,9 @@ public enum ValidationException implements IExceptionMessage {
 	EXCHANGE_SERVICE_FAIL("1003",
 			"Error on exchange service. Currency code: {0}. Error code {1} and detail: {2}"),
 
-	IP_BANNED("1004", "The IP: {0} is banned")
+	IP_BANNED("1004", "The IP: {0} is banned"),
+
+	NOT_VALID_URL("1005", "Not valid URL: {0}"),
 
 	;
 

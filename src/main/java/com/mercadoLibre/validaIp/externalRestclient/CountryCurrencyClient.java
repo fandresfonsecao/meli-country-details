@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
@@ -29,6 +30,9 @@ public class CountryCurrencyClient {
 	@Autowired
 	private ApplicationProperties applicationProperties;
 
+	@Autowired
+	private RestTemplate restTemplate;
+
 	/**
 	 * Get the currency for any given country name
 	 * 
@@ -39,7 +43,6 @@ public class CountryCurrencyClient {
 		String baseEndpoint = applicationProperties
 				.getProperty(ApplicationPropertyCode.COUNTRY_DETAIL_ENDPOINT);
 		String endpoint = MessageFormat.format(baseEndpoint, countryName);
-		RestTemplate restTemplate = new RestTemplate();
 		// Strange response conventional way for getting it didn't work
 		Object[] responseObject = restTemplate.getForObject(endpoint, Object[].class);
 		if (Objects.isNull(responseObject)) {
@@ -59,6 +62,10 @@ public class CountryCurrencyClient {
 		currency.setCode(responseLinkedHashMapInner.get("code"));
 		currency.setName(responseLinkedHashMapInner.get("name"));
 		currency.setSymbol(responseLinkedHashMapInner.get("symbol"));
+		if (StringUtils.isBlank(currency.getCode()) && StringUtils.isBlank(currency.getName())
+				&& StringUtils.isBlank(currency.getSymbol())) {
+			throw new RestException(NotFoundException.CURRENCIES_NOT_FOUND, countryName);
+		}
 		return currency;
 	}
 

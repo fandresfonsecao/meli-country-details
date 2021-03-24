@@ -57,7 +57,9 @@ public class BannedIpImpl extends CustomCache<BannedIpDto> {
 	}
 
 	public boolean exists(String ip) {
-		return super.existsInCache(BannedIpTransformer.toBannedIpDto(ip)) || banIpFacade.existsById(ip);
+		UtilValidation.validateIp(ip);
+		return super.existsInCache(BannedIpTransformer.toBannedIpDto(ip))
+				|| banIpFacade.existsById(ip);
 	}
 
 	@Override

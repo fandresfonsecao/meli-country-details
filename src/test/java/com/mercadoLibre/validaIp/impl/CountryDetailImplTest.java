@@ -2,106 +2,105 @@ package com.mercadoLibre.validaIp.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 
 import com.mercadoLibre.validaIp.dto.CountryDetailDto;
-import com.mercadoLibre.validaIp.exception.RestException;
-import com.mercadoLibre.validaIp.exception.message.NotFoundException;
-import com.mercadoLibre.validaIp.exception.message.ValidationException;
+import com.mercadoLibre.validaIp.dto.CountryInfoResp;
+import com.mercadoLibre.validaIp.dto.Currency;
+import com.mercadoLibre.validaIp.dto.CurrencyExchangeDto;
 import com.mercadoLibre.validaIp.externalRestclient.CountryCurrencyClient;
 import com.mercadoLibre.validaIp.externalRestclient.CountryExchangeClient;
 import com.mercadoLibre.validaIp.externalRestclient.CountryInfoClient;
+import com.mercadoLibre.validaIp.persistence.BanIpFacade;
 import com.mercadoLibre.validaIp.persistence.CountryDetailFacade;
 import com.mercadoLibre.validaIp.util.ApplicationProperties;
+import com.mercadoLibre.validaIp.util.ApplicationPropertyCode;
+import com.mercadoLibre.validaIp.util.UtilDatetime;
 
-@SpringBootTest
 class CountryDetailImplTest {
 
-	@Autowired
+	@Mock
+	private Cache cache;
+
+	@Mock
 	private CountryInfoClient countryInfoClient;
 
-	@Autowired
+	@Mock
 	private CountryCurrencyClient countryCurrencyClient;
 
-	@Autowired
+	@Mock
 	private CountryExchangeClient countryExchangeClient;
 
-	@Autowired
+	@Mock
 	private BannedIpImpl bannedIpImpl;
 
-	@Autowired
+	@Mock
 	private CacheManager cacheManager;
 
-	@Autowired
+	@Mock
 	private CountryDetailFacade countryDetailFacade;
 
-	@Autowired
+	@Mock
 	private ApplicationProperties applicationProperties;
 
-	@Autowired
+	@Mock
+	private BanIpFacade banIpFacade;
+
+	@InjectMocks
 	private CountryDetailImpl countryDetailImpl;
 
-	@Test
-	void testAllIsUp() {
-		assertNotNull(countryInfoClient, "countryInfo is null");
-		assertNotNull(countryCurrencyClient, "countryCurrency is null");
-		assertNotNull(countryExchangeClient, "countryExchange is null");
-		assertNotNull(bannedIpImpl, "bannedIpImpl is null");
-		assertNotNull(cacheManager, "cacheManager is null");
-		assertNotNull(countryDetailFacade, "countryDetailFacade is null");
-		assertNotNull(applicationProperties, "applicationProperties is null");
+	@BeforeEach
+	public void setUp() {
+		MockitoAnnotations.initMocks(this);
+		Cache cache = Mockito.mock(Cache.class);
+		when(cacheManager.getCache(countryDetailImpl.getCacheName())).thenReturn(cache);
 	}
 
 	@Test
-	void testGetCountryDetailInvalidIp() {
-		String ip = "4.4.4";
-		Exception exception = assertThrows(RestException.class, () -> {
-			countryDetailImpl.getCountryDetail(ip, new String[] { "EUR", "USD" });
-		}, "Invalid Ip");
-		assertTrue(exception.getMessage().contains(ValidationException.NOT_VALID_IP.getMessage(ip)),
-				"Different message in exception throwed");
-	}
-
-	@Test
-	void testGetCountryDetailBannedIp() {
-		String ip = "4.4.4.4";
-		bannedIpImpl.add(ip);
-		Exception exception = assertThrows(RestException.class, () -> {
-			countryDetailImpl.getCountryDetail(ip, new String[] { "EUR", "USD" });
-		}, "Banned IP");
-		assertTrue(exception.getMessage().contains(ValidationException.IP_BANNED.getMessage(ip)),
-				"Different message in exception throwed");
-	}
-
-	@Test
-	void testGetCountryDetailNonExistentIp() {
-		String ip = "10.10.10.10";
-		if (bannedIpImpl.exists(ip)) {
-			bannedIpImpl.delete(ip);
-		}
-		Exception exception = assertThrows(RestException.class, () -> {
-			countryDetailImpl.getCountryDetail(ip, new String[] { "EUR", "USD" });
-		}, "Non existent contry");
-		assertTrue(
-				exception.getMessage().contains(NotFoundException.COUNTRY_NOT_FOUND.getMessage(ip)),
-				"Different message in exception throwed");
-	}
-
-	@Test
-	void testGetCountryDetailColombianIp() {
-		String ip = "190.157.8.108";
-		if (bannedIpImpl.exists(ip)) {
-			bannedIpImpl.delete(ip);
-		}
-		CountryDetailDto countryDetailDto = countryDetailImpl.getCountryDetail(ip,
-				new String[] { "EUR", "USD" });
-		assertNotNull(countryDetailDto, "Country detail empty");
+	void testGetCountryDetailFromCache() {
+		String ip = "1.1.1.1";
+		CountryInfoResp countryInfoResp = new CountryInfoResp();
+		countryInfoResp.setCountryCode("CO");
+		countryInfoResp.setCountryCode3("COL");
+		countryInfoResp.setCountryName("Colombia");
+		when(countryInfoClient.getCountryByIp(ip)).thenReturn(countryInfoResp);
+		CountryDetailDto countryDetailDtoCache = new CountryDetailDto();
+		countryDetailDtoCache.setName(countryInfoResp.getCountryName());
+		countryDetailDtoCache.setIsoCode(countryInfoResp.getCountryCode3());
+		countryDetailDtoCache.setDmlTmst(UtilDatetime.getTimestampNow());
+		Currency currency = new Currency();
+		currency.setCode("COP");
+		currency.setName("Colombian peso");
+		currency.setSymbol("$");
+		countryDetailDtoCache.setCurrency(currency);
+		List<CurrencyExchangeDto> currencyExchanges = new ArrayList<>();
+		CurrencyExchangeDto currencyExchangeDto = new CurrencyExchangeDto();
+		currencyExchangeDto.setType("USD");
+		currencyExchangeDto.setValue(3561.25);
+		currencyExchanges.add(currencyExchangeDto);
+		countryDetailDtoCache.setCurrencyExchanges(currencyExchanges);
+		when(cache.get(countryDetailDtoCache.getId(), CountryDetailDto.class))
+				.thenReturn(countryDetailDtoCache);
+		when(countryDetailImpl.getFromCache(countryDetailDtoCache))
+				.thenReturn(countryDetailDtoCache);
+		when(applicationProperties.getProperty(ApplicationPropertyCode.CACHE_IN_SECONDS))
+				.thenReturn("60");
+		CountryDetailDto countryDetailDto = countryDetailImpl.getCountryDetail(ip, null);
+		assertNotNull(countryDetailDto, "Country detail null");
 		assertNotNull(countryDetailDto.getName(), "Country name empty");
 		assertNotNull(countryDetailDto.getIsoCode(), "ISO code empty");
 		assertNotNull(countryDetailDto.getDmlTmst(), "Dml tmst empty");
@@ -110,44 +109,52 @@ class CountryDetailImplTest {
 		assertEquals("COP", countryDetailDto.getCurrency().getCode(), "No match currency code");
 		assertEquals("Colombian peso", countryDetailDto.getCurrency().getName(),
 				"No match currency name");
+		assertTrue(CollectionUtils.isNotEmpty(countryDetailDto.getCurrencyExchanges()),
+				"Currency exchanges is empty");
 	}
 
 	@Test
-	void testGetCountryDetailUsaIp() {
-		String ip = "4.4.4.4";
-		if (bannedIpImpl.exists(ip)) {
-			bannedIpImpl.delete(ip);
-		}
-		CountryDetailDto countryDetailDto = countryDetailImpl.getCountryDetail(ip,
-				new String[] { "EUR", "USD" });
-		assertNotNull(countryDetailDto, "Country detail empty");
+	void testGetCountryDetailNoCache() {
+		String ip = "1.1.1.1";
+		CountryInfoResp countryInfoResp = new CountryInfoResp();
+		countryInfoResp.setCountryCode("CO");
+		countryInfoResp.setCountryCode3("COL");
+		countryInfoResp.setCountryName("Colombia");
+		when(countryInfoClient.getCountryByIp(ip)).thenReturn(countryInfoResp);
+		CountryDetailDto countryDetailDtoCache = new CountryDetailDto();
+		countryDetailDtoCache.setName(countryInfoResp.getCountryName());
+		countryDetailDtoCache.setIsoCode(countryInfoResp.getCountryCode3());
+		countryDetailDtoCache.setDmlTmst(UtilDatetime.getTimestampNow());
+		Currency currency = new Currency();
+		currency.setCode("COP");
+		currency.setName("Colombian peso");
+		currency.setSymbol("$");
+		countryDetailDtoCache.setCurrency(currency);
+		List<CurrencyExchangeDto> currencyExchanges = new ArrayList<>();
+		CurrencyExchangeDto currencyExchangeDto = new CurrencyExchangeDto();
+		currencyExchangeDto.setType("USD");
+		currencyExchangeDto.setValue(3561.25);
+		currencyExchanges.add(currencyExchangeDto);
+		countryDetailDtoCache.setCurrencyExchanges(currencyExchanges);
+		when(countryDetailImpl.getFromCache(countryDetailDtoCache)).thenReturn(null);
+		when(applicationProperties.getProperty(ApplicationPropertyCode.CACHE_IN_SECONDS))
+				.thenReturn("60");
+		when(countryCurrencyClient.getCurency(countryInfoResp.getCountryName()))
+				.thenReturn(currency);
+		when(countryExchangeClient.getCurrencyExchanges(currency.getCode(), null))
+				.thenReturn(currencyExchanges);
+		CountryDetailDto countryDetailDto = countryDetailImpl.getCountryDetail(ip, null);
+		assertNotNull(countryDetailDto, "Country detail null");
 		assertNotNull(countryDetailDto.getName(), "Country name empty");
 		assertNotNull(countryDetailDto.getIsoCode(), "ISO code empty");
 		assertNotNull(countryDetailDto.getDmlTmst(), "Dml tmst empty");
-		assertEquals("United States", countryDetailDto.getName(), "No match country name");
-		assertEquals("USA", countryDetailDto.getIsoCode(), "No match ISO code name");
-		assertEquals("USD", countryDetailDto.getCurrency().getCode(), "No match currency code");
-		assertEquals("United States Dollar", countryDetailDto.getCurrency().getName(),
+		assertEquals("Colombia", countryDetailDto.getName(), "No match country name");
+		assertEquals("COL", countryDetailDto.getIsoCode(), "No match ISO code name");
+		assertEquals("COP", countryDetailDto.getCurrency().getCode(), "No match currency code");
+		assertEquals("Colombian peso", countryDetailDto.getCurrency().getName(),
 				"No match currency name");
-	}
-
-	@Test
-	void testGetCountryDetailFranceIp() {
-		String ip = "2.2.2.2";
-		if (bannedIpImpl.exists(ip)) {
-			bannedIpImpl.delete(ip);
-		}
-		CountryDetailDto countryDetailDto = countryDetailImpl.getCountryDetail(ip,
-				new String[] { "EUR", "USD" });
-		assertNotNull(countryDetailDto, "Country detail empty");
-		assertNotNull(countryDetailDto.getName(), "Country name empty");
-		assertNotNull(countryDetailDto.getIsoCode(), "ISO code empty");
-		assertNotNull(countryDetailDto.getDmlTmst(), "Dml tmst empty");
-		assertNotNull(countryDetailDto.getCurrency(), "Country currency empty");
-		assertEquals("France", countryDetailDto.getName(), "No match country name");
-		assertEquals("FRA", countryDetailDto.getIsoCode(), "No match ISO code name");
-		assertEquals("EUR", countryDetailDto.getCurrency().getCode(), "No match currency code");
-		assertEquals("Euro", countryDetailDto.getCurrency().getName(), "No match currency name");
+		assertTrue(CollectionUtils.isNotEmpty(countryDetailDto.getCurrencyExchanges()),
+				"Currency exchanges is empty");
 	}
 
 }
