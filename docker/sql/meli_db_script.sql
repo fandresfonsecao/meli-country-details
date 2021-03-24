@@ -1,11 +1,11 @@
-CREATE TABLE melidb.banned_ip 
+CREATE TABLE IF NOT EXISTS melidb.banned_ip 
 (
 ip varchar(40) not null,
 dml_tmst timestamp not null, 
 constraint ban_ip_pk primary key (ip) 
 );
 
-CREATE TABLE melidb.country_detail 
+CREATE TABLE IF NOT EXISTS melidb.country_detail 
 (
 country_code varchar(3),
 country_name varchar(50) not null,
@@ -13,7 +13,7 @@ dml_tmst timestamp not null,
 constraint country_detail_pk primary key (country_code) 
 );
 
-CREATE TABLE melidb.country_currency
+CREATE TABLE IF NOT EXISTS melidb.country_currency
 (
 country_currency_id int AUTO_INCREMENT,
 country_code varchar(3),
@@ -26,7 +26,7 @@ constraint country_currency_uk unique (country_code, currency_code),
 constraint country_currency_fk foreign key (country_code) references country_detail(country_code)
 );
 
-CREATE TABLE melidb.currency_exchange
+CREATE TABLE IF NOT EXISTS melidb.currency_exchange
 (
 currency_exchange_id int AUTO_INCREMENT,
 country_code varchar(3),
