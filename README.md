@@ -106,6 +106,9 @@ Cuando terminé de leer el ejercicio el principal objetivo era una API rest. Pri
   1. Clonar el proyecto a una ruta local.
   2. Ubicarse en la carpeta docker dentro del proyecto.
   3. Ejecutar desde una terminal de comandos (Dentro de la carpeta docker): ```docker-compose up --build```
+- Si las tablas no se llegan a crear se debe ejecutar lo siguiente (Dentro de la carpeta docker):
+  1. ```docker exec -it my_sql /bin/bash```
+  2. ```mysql -h127.0.0.1 -P3306 -uroot -pmeli_pass -Dmelidb < /docker-entrypoint-initdb.d/meli_db_script.sql```
 
 # Explorar
 
